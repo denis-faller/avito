@@ -5,18 +5,20 @@ Class Avito{
     private $iblockId;
     private $url;
     private $quantity_allow;
-    private $subcategoryProduct;
-    private $adType;
-    private $contactPhone;
-    private $address;
+    private $subcategoryProductPropCode;
+    private $adTypePropCode;
+    private $contactPhonePropCode;
+    private $addressPropCode;
     private $morePhotoPropCode;
     private $oemPropCode;
     private $conditionPropCode;
     private $cml2articlePropCode;
     
-    public function __construct($iblockId, $url, $quantity_allow, $subcategoryProduct, $adType, 
-            $contactPhone, 
-            $address, 
+    public function __construct($iblockId, $url, $quantity_allow, 
+            $subcategoryProductPropCode, 
+            $adTypePropCode, 
+            $contactPhonePropCode, 
+            $addressPropCode, 
             $morePhotoPropCode,
             $oemPropCode,
             $conditionPropCode,
@@ -24,10 +26,10 @@ Class Avito{
         $this->iblockId = $iblockId;
         $this->url = $url;
         $this->quantity_allow = $quantity_allow;
-        $this->subcategoryProduct = $subcategoryProduct;
-        $this->adType = $adType;
-        $this->contactPhone = $contactPhone;
-        $this->address = $address;
+        $this->subcategoryProductPropCode = $subcategoryProductPropCode;
+        $this->adTypePropCode = $adTypePropCode;
+        $this->contactPhonePropCode = $contactPhonePropCode;
+        $this->addressPropCode = $addressPropCode;
         $this->morePhotoPropCode = $morePhotoPropCode;
         $this->oemPropCode = $oemPropCode;
         $this->conditionPropCode = $conditionPropCode;
@@ -67,10 +69,6 @@ Class Avito{
             
             $products[$arRes["ID"]]["name"] = $arRes["NAME"];
             $products[$arRes["ID"]]["category"] = "Запчасти и аксессуары";
-            $products[$arRes["ID"]]["type_id"] = $this->subcategoryProduct;
-            $products[$arRes["ID"]]["ad_type"] = $this->adType;
-            $products[$arRes["ID"]]["contact_phone"] = $this->contactPhone;
-            $products[$arRes["ID"]]["adress"] = $this->address;
             $products[$arRes["ID"]]["img"] = CFile::GetPath($arRes["DETAIL_PICTURE"]);
             $products[$arRes["ID"]]["img"] = $this->url.$products[$arRes["ID"]]["img"];
             $products[$arRes["ID"]]["price"] = CPrice::GetBasePrice($arRes["ID"]);
@@ -79,6 +77,11 @@ Class Avito{
             $products[$arRes["ID"]]["quantity"] = $products[$arRes["ID"]]["quantity"]["QUANTITY"];
             
             $props = $obRes->GetProperties();
+			
+			$products[$arRes["ID"]]["type_id"] = $props[$this->subcategoryProductPropCode]["VALUE"];
+            $products[$arRes["ID"]]["ad_type"] = $props[$this->adTypePropCode]["VALUE"];
+            $products[$arRes["ID"]]["contact_phone"] = $props[$this->contactPhonePropCode]["VALUE"];
+            $products[$arRes["ID"]]["adress"] = $props[$this->addressPropCode]["VALUE"];
             
            if(isset($props[$this->morePhotoPropCode]["VALUE"])){
                 foreach($props[$this->morePhotoPropCode]["VALUE"] as $morePhotoID){
